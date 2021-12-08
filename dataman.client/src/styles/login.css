@@ -1,0 +1,22 @@
+.login-page-wrapper {
+    padding: 20px;
+    text-align: center;
+    border: 2px solid lightgrey;
+    border-radius: 15px;
+    margin: 20px auto 0;
+    max-width: 500px;
+}
+
+.register-stack {
+    border: 1px solid lightgrey;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.register-stack div {
+    margin: 2px;
+}
+
+.register-stack .MuiTextField-root {
+    width: 80%;
+}
