@@ -1,7 +1,7 @@
+const mongoose = require("mongoose");
 const express = require('express');
 const logger = require('morgan');
 const app = express();
-const db = require("./database/db");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -14,28 +14,44 @@ const usersRouter = require('./routes/users');
 const sessionRouter = require('./routes/sessions');
 const bodyParser = require("body-parser");
 
-// middleware
-app.use(logger('dev'));
-app.use(cors({
-    origin: process.env.REACT_URL,
-    credentials: true
-}));
-app.use(bodyParser.json());
-app.use(cookieParser(process.env.EXPRESS_SESSION_SECRET_KEY))
-app.use(session({
-    secret: process.env.EXPRESS_SESSION_SECRET_KEY,
-    resave: true,
-    saveUninitialized: true
-}));
+//----------------------------------------- END OF IMPORTS---------------------------------------------------
 
+const dotenv = require("dotenv");
+dotenv.config();
+
+mongoose.connect(
+    process.env.MONGO_URL,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    },
+    () => {
+        console.log("Mongoose Is Connected");
+    }
+);
+
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+    cors({
+        origin: "http://localhost:3000", // <-- location of the react app were connecting to
+        credentials: true,
+    })
+);
+app.use(
+    session({
+        secret: "secretcode",
+        resave: true,
+        saveUninitialized: true,
+    })
+);
+app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
-require('./passportConfig')(passport);
+require("./passportConfig")(passport);
 
-app.use((req, res, next) => {
-    req.passport = passport;
-    return next();
-})
+//----------------------------------------- END OF MIDDLEWARE---------------------------------------------------
 
 
 app.use('/', indexRouter);

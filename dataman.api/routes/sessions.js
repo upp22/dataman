@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/UserSchema.js');
 const bcrypt = require('bcryptjs');
+const passport = require("passport");
 
-router.post('/login', (req, res, next) => {
-    req.passport.authenticate("local", (err, user, info) => {
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
         if (!user) res.send("No User Exists");
         else {
