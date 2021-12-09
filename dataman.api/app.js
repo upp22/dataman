@@ -18,7 +18,6 @@ const bodyParser = require("body-parser");
 
 const dotenv = require("dotenv");
 dotenv.config();
-
 mongoose.connect(
     process.env.MONGO_URL,
     {
@@ -52,7 +51,6 @@ app.use(passport.session());
 require("./passportConfig")(passport);
 
 //----------------------------------------- END OF MIDDLEWARE---------------------------------------------------
-
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

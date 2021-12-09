@@ -30,16 +30,21 @@ router.post('/register', function(req, res, next) {
                 password: hash
             });
             await newUser.save();
+            res.send("User Created");
         }
     })
-
-    console.log(req.body)
-    res.json('register');
 });
 
-router.get('/user', function(req, res, next) {
-    console.log(req.body)
-    res.json('user get');
+router.get('/user',function(req, res, next) {
+    console.log(req.user)
+    res.send(req.user);
 });
+
+router.get('/logout',function(req, res, next) {
+    console.log(req);
+    req.logout();
+    res.send('Logout');
+});
+
 
 module.exports = router;

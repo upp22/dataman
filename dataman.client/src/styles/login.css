@@ -7,16 +7,17 @@
     max-width: 500px;
 }
 
-.register-stack {
+.form-stack {
     border: 1px solid lightgrey;
     border-radius: 15px;
     padding: 15px;
+    margin-bottom: 10px;
 }
 
-.register-stack div {
+.form-stack div {
     margin: 2px;
 }
 
-.register-stack .MuiTextField-root {
+.form-stack .MuiTextField-root {
     width: 80%;
 }

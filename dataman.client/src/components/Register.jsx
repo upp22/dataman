@@ -1,8 +1,10 @@
 import {Button, TextField} from "@material-ui/core";
 import {useState} from "react";
+import axios from "axios";
+
+// ---- Toast Library ----
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from "axios";
 toast.configure({position: toast.POSITION.BOTTOM_RIGHT});
 
 export default function Register() {
@@ -31,13 +33,19 @@ export default function Register() {
 
         axios.post(`${process.env.REACT_APP_API_URL}/sessions/register`,payload, {withCredentials: true}).then(res => {
             console.log(res);
+            if (res.data == 'User Exists') {
+                toast.warning('User Exists');
+            } else if (res.data == 'User Created') {
+                toast.success('User Created');
+            }
         }).catch(err => {
             console.log(err);
+            toast.error("Unable to register user. Check logs for details");
         })
     }
 
     return (
-        <div className={"register-stack"}>
+        <div className={"form-stack"}>
             <h6>Register</h6>
             <TextField id="username_id" label="username" variant="standard" onChange={(e) => setUsername(e.target.value)}/>
             <TextField id="email_id" label="email" variant="standard" type={"email"} onChange={(e) => setEmail(e.target.value)}/>
