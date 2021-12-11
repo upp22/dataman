@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import {Button, TextField} from "@material-ui/core";
 import {useContext, useState} from "react";
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,12 +7,14 @@ import UserContext from "../context/UserContext";
 import { toast } from 'react-toastify';
 toast.configure({position: toast.POSITION.BOTTOM_RIGHT});
 
+
 export default function Login() {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const navigate = useNavigate();
 
     // ------ Context ------
-    const { user, setUser } = useContext(UserContext);
+    const { userContext, setUserContext } = useContext(UserContext);
     // ---------------------
 
     const handleSubmit = () => {
@@ -26,10 +29,12 @@ export default function Login() {
             password: password
         }
 
+
         axios.post(`${process.env.REACT_APP_API_URL}/sessions/login`,payload, {withCredentials: true}).then(res => {
             if (res.data == 'Successfully Authenticated') {
                 toast.success('Successfully logged in');
-                setUser({user: email});
+                setUserContext({user: email});
+                navigate('/');
             } else {
                 toast.warning('Unable to login');
             }

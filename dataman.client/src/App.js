@@ -13,21 +13,18 @@ import UserContext from "./context/UserContext";
 import {toast} from "react-toastify";
 
 function App() {
-    const [user, setUser] = useState({})
-    const value = { user, setUser};
+    const [userContext, setUserContext] = useState({})
+    const value = { userContext, setUserContext};
 
-    useEffect((x) => {
-        console.log('user has changed');
-    }, [user])
-
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [authState, setAuthState] = useState(false);
     axios.get(`${process.env.REACT_APP_API_URL}/sessions/user`, {withCredentials: true}).then(res => {
-        res.data.email ? setLoggedIn(true) : setLoggedIn(false);
+        setAuthState(!!res.data.email);
     })
 
     const handleLogout = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/sessions/logout`, {withCredentials: true}).then(res => {
-            res.data.email ? setLoggedIn(true) : setLoggedIn(false);
+            res.data.email ? setAuthState(true) : setAuthState(false);
+            setAuthState(!!res.data.email);
         })
     }
 
@@ -43,14 +40,11 @@ function App() {
                                 <Nav className="me-auto">
                                     <Nav.Link as={Link} to={'/'}>Home</Nav.Link>
                                     <Nav.Link as={Link} to={'/about'}>About</Nav.Link>
-                                    <Nav.Link as={Link} to={'/login'}>Login</Nav.Link>
                                 </Nav>
                                 {
-                                    loggedIn && (
-                                        <Nav>
-                                            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-                                        </Nav>
-                                    )
+                                    authState
+                                        ? <Nav><Nav.Link onClick={handleLogout} as={Link} to={'/login'}>Logout</Nav.Link></Nav>
+                                        : <Nav><Nav.Link as={Link} to={'/login'} >Login</Nav.Link></Nav>
                                 }
                             </Navbar.Collapse>
                         </Container>

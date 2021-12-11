@@ -3,11 +3,13 @@ import {Button} from "@material-ui/core";
 import axios from 'axios';
 import UserContext from "../context/UserContext";
 import { toast } from 'react-toastify';
+
 toast.configure({position: toast.POSITION.BOTTOM_RIGHT});
 
 export default function LoginStatus() {
     const [name, setName] = useState(null);
-    const { user, setUser } = useContext(UserContext);
+    const { userContext, setUser } = useContext(UserContext);
+
 
     const handleClick = (e) => {
         axios.get(`${process.env.REACT_APP_API_URL}/sessions/user`, {withCredentials: true}).then(res => {
@@ -26,7 +28,7 @@ export default function LoginStatus() {
 
     return (
         <div className={'form-stack'}>
-            <p>{user.user}</p>
+            <p>{userContext.user}</p>
             <div>
                 <Button color="primary" variant={"contained"} onClick={handleClick} >Check User</Button>
                 <Button color="primary" variant={"contained"} onClick={handleLogout} >Logout</Button>

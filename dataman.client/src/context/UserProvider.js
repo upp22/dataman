@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import userContext from "./userContext";
 
 const UserProvider = props => {
-    const [user, setUser] = React.useState({});
+    const [userContext, setUser] = React.useState({});
 
     return (
-        <userContext.Provider value={{ user }}>
+        <userContext.Provider value={{ userContext }}>
             {props.children}
         </userContext.Provider>
     );
