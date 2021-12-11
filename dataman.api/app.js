@@ -8,6 +8,9 @@ const session = require('express-session');
 const passport = require("passport");
 const passportLocal = require("passport-local").Strategy;
 
+
+
+
 // routes
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -17,6 +20,7 @@ const bodyParser = require("body-parser");
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 
 const dotenv = require("dotenv");
+const http = require("http");
 dotenv.config();
 mongoose.connect(
     process.env.MONGO_URL,
@@ -45,6 +49,7 @@ app.use(
         saveUninitialized: true,
     })
 );
+
 app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
