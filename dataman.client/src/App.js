@@ -14,9 +14,16 @@ import {toast} from "react-toastify";
 
 function App() {
     const [userContext, setUserContext] = useState({})
-    const value = { userContext, setUserContext};
-
+    const [routes, setRoutes] = useState((
+        <Routes>
+            <Route path={'/'} element={<HomePage/>}/>
+            <Route path={'/Login'} element={<LoginPage/>}/>
+            <Route path={'*'} element={<p>Not Found here</p>}/>
+        </Routes>
+    ))
+    const value = {userContext, setUserContext};
     const [authState, setAuthState] = useState(false);
+
     axios.get(`${process.env.REACT_APP_API_URL}/sessions/user`, {withCredentials: true}).then(res => {
         setAuthState(!!res.data.email);
     })
@@ -28,8 +35,26 @@ function App() {
         })
     }
 
+    // When auth state changes protect the routes
+    useEffect((x) => {
+        determineRoutes();
+    }, [authState])
+
+    const determineRoutes = () => {
+        if (authState) {
+            setRoutes((
+                <Routes>
+                    <Route path={'/'} element={<HomePage/>}/>
+                    <Route path={'/About'} element={<AboutPage/>}/>
+                    <Route path={'/Login'} element={<LoginPage/>}/>
+                    <Route path={'*'} element={<p>Not Found</p>}/>
+                </Routes>
+            ))
+        }
+    }
+
     return (
-        <UserContext.Provider value={value} >
+        <UserContext.Provider value={value}>
             <div className="App">
                 <BrowserRouter>
                     <Navbar bg="light" expand="lg">
@@ -43,18 +68,16 @@ function App() {
                                 </Nav>
                                 {
                                     authState
-                                        ? <Nav><Nav.Link onClick={handleLogout} as={Link} to={'/login'}>Logout</Nav.Link></Nav>
-                                        : <Nav><Nav.Link as={Link} to={'/login'} >Login</Nav.Link></Nav>
+                                        ?
+                                        <Nav><Nav.Link onClick={handleLogout} as={Link} to={'/login'}>Logout</Nav.Link></Nav>
+                                        : <Nav><Nav.Link as={Link} to={'/login'}>Login</Nav.Link></Nav>
                                 }
                             </Navbar.Collapse>
                         </Container>
                     </Navbar>
-                    <Routes>
-                        <Route path={'/'} element={<HomePage/>}/>
-                        <Route path={'/About'} element={<AboutPage/>}/>
-                        <Route path={'/Login'} element={<LoginPage/>}/>
-                        <Route path={'*'} element={<p>Not Found</p>}/>
-                    </Routes>
+                    {
+                        routes
+                    }
                 </BrowserRouter>
             </div>
 
