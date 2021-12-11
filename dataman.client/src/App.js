@@ -13,8 +13,8 @@ import UserContext from "./context/UserContext";
 import {toast} from "react-toastify";
 import {MapPage} from "./pages/MapPage";
 
-
 function App() {
+
     const [userContext, setUserContext] = useState({})
     const [routes, setRoutes] = useState((
         <Routes>
@@ -42,6 +42,7 @@ function App() {
     useEffect((x) => {
         determineRoutes();
     }, [authState])
+
 
     const determineRoutes = () => {
         // Set authenticated routes here
