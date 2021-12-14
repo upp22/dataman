@@ -9,11 +9,10 @@ const passport = require("passport");
 const passportLocal = require("passport-local").Strategy;
 
 // SocketIo
-const { createServer } = require("http");
+const {createServer} = require("http");
 const server = createServer(app)
 const socketIo = require("socket.io");
-const io = socketIo(server, { cors: { origin: "*" } });
-
+const io = socketIo(server, {cors: {origin: "*"}});
 
 // routes
 const indexRouter = require('./routes/index');
@@ -29,14 +28,30 @@ app.use(
     })
 );
 
+const connectedClients = [];
+
 io.sockets.on('connection', (socket) => {
     console.log(`Socket client connected: ${socket.id}`);
-    socket.on('clientLocationUpdate',function (data) {
+
+    // when user logs in we get their user details and add to list of ids:
+    socket.on('clientLogin', (u) => {
+
+    });
+
+    socket.on('disconnect', s => {
+
+    })
+
+    socket.on('test', x => {
+        console.log('Test from socket client received');
+    })
+
+
+    socket.on('clientLocationUpdate', function (data) {
         // TODO: Get Id and socket ID of clients (match these to user names) then broadcast to all connected clients
         console.log(`Client Location Update: ${data}`)
     });
 })
-
 
 
 const dotenv = require("dotenv");
@@ -55,7 +70,7 @@ mongoose.connect(
 
 // Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(
     session({

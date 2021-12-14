@@ -3,6 +3,7 @@ import {Stack} from "@mui/material";
 import "../styles/login.css";
 import Register from "../components/Register";
 import Login from "../components/Login";
+import LoginStatus from "../components/LoginStatus";
 
 
 export function LoginPage() {
@@ -11,6 +12,7 @@ export function LoginPage() {
             <Stack>
                 <Login></Login>
                 <Register></Register>
+                <LoginStatus></LoginStatus>
             </Stack>
         </div>
     )

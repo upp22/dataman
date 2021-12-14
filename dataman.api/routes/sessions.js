@@ -12,14 +12,13 @@ router.post("/login", (req, res, next) => {
             req.logIn(user, (err) => {
                 if (err) throw err;
                 res.send("Successfully Authenticated");
-                console.log(req.user);
             });
         }
     })(req, res, next);
 });
 
 router.post('/register', function(req, res, next) {
-    User.findOne({username: req.body.username}, async (err, doc) => {
+    User.findOne({email: req.body.email}, async (err, doc) => {
         if (err) throw err;
         if (doc) { res.send('User Exists') }
         if (!doc) {
@@ -36,12 +35,12 @@ router.post('/register', function(req, res, next) {
 });
 
 router.get('/user',function(req, res, next) {
-    console.log(req.user)
+    // console.log(req.user ? req.user : "No user logged in");
     res.send(req.user);
 });
 
 router.get('/logout',function(req, res, next) {
-    console.log(req);
+    // console.log(req);
     req.logout();
     res.send('Logout');
 });

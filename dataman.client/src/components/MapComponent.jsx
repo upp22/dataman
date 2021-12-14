@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import {socket} from "../context/SocketModule.js";
 
 const MapComponent = () => {
     const defaultCenter = { lat: -27.4705, lng: 153.0260 }
@@ -12,9 +11,7 @@ const MapComponent = () => {
                 setCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude});
                 console.log("Latitude is :", position.coords.latitude);
                 console.log("Longitude is :", position.coords.longitude);
-
-                socket.emit('clientLocationUpdate', position.coords);
-
+                // socket.emit('clientLocationUpdate', position.coords);
             });
         } else {
             console.log("Not Available");
