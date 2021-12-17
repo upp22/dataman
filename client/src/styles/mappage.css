@@ -1,0 +1,13 @@
+.map-main-content-wrapper {
+    display: flex;
+}
+
+@media screen and (max-width: 850px) {
+    .map-main-content-wrapper {
+        flex-wrap: wrap;
+    }
+}
+
+.map-users {
+    flex: 1;
+}
