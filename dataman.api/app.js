@@ -33,25 +33,63 @@ const connectedClients = [];
 io.sockets.on('connection', (socket) => {
     console.log(`Socket client connected: ${socket.id}`);
 
+    const broadcastLocationUpdate = (clients) => {
+        const socketIds = clients.map(x => x.socketId);
+        socketIds.forEach(s => {
+            io.to(s).emit('locationUpdate', clients);
+        });
+    }
+
+    let user = {
+        socketId: socket.id,
+        user: null,
+        location: { lat: 0, lng: 0 }
+    }
+    if (!connectedClients.some(s => s.socketId.includes(socket.id))) {
+        connectedClients.push(user);
+    }
+
+    const socketIds = connectedClients.map(x => x.socketId);
+    socketIds.forEach(s => {
+       io.to(s).emit('initialConnect', connectedClients);
+    });
+
     // when user logs in we get their user details and add to list of ids:
     socket.on('clientLogin', (u) => {
-
+        console.log(u);
+        let index = connectedClients.findIndex(item => item.socketId === u.socketId);
+        if (index > -1) {
+            connectedClients[index].user = u.user;
+        }
+        broadcastLocationUpdate(connectedClients);
     });
 
+    // Delete socket when disconnects
     socket.on('disconnect', s => {
-
+        const index = connectedClients.findIndex(i => i.socketId === socket.id);
+        connectedClients.splice(index, 1);
+        broadcastLocationUpdate(connectedClients);
     })
 
-    socket.on('test', x => {
-        console.log('Test from socket client received');
-    })
+    // Remove user from socket on logout
+    socket.on('logout', s => {
+        const index = connectedClients.findIndex(i => i.socketId === socket.id);
+        connectedClients[index].user = null;
+        broadcastLocationUpdate(connectedClients);
+    });
 
-
-    socket.on('clientLocationUpdate', function (data) {
+    socket.on('locationUpdate', function (data) {
         // TODO: Get Id and socket ID of clients (match these to user names) then broadcast to all connected clients
-        console.log(`Client Location Update: ${data}`)
+        console.log(`Client Location Update: ${data}`);
+        console.log(connectedClients)
+        const index = connectedClients.findIndex(i => i.socketId === socket.id);
+        connectedClients[index].location.lat = data.lat;
+        connectedClients[index].location.lng = data.lng;
+        broadcastLocationUpdate(connectedClients);
     });
 })
+
+
 
 
 const dotenv = require("dotenv");

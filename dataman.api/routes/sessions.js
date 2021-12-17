@@ -17,10 +17,11 @@ router.post("/login", (req, res, next) => {
     })(req, res, next);
 });
 
-router.post('/register', function(req, res, next) {
-    User.findOne({email: req.body.email}, async (err, doc) => {
-        if (err) throw err;
-        if (doc) { res.send('User Exists') }
+router.post('/register', async function(req, res, next) {
+
+    const doc = await User.findOne({email: req.body.email}).exec();
+
+       if (doc) { res.send('User Exists') }
         if (!doc) {
             const hash = await bcrypt.hash(req.body.password, 10);
             const newUser = new User({
@@ -31,7 +32,6 @@ router.post('/register', function(req, res, next) {
             await newUser.save();
             res.send("User Created");
         }
-    })
 });
 
 router.get('/user',function(req, res, next) {

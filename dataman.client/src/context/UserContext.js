@@ -17,7 +17,7 @@ export function UserProvider ({children}) {
         loginStatus: false,
         email: null,
         socketId: null,
-        connectedUserSocketIds: []
+        connectedUsers: []
     });
     const updateUserContextFunction = (c) => {
         setUserContext(c);

@@ -41,6 +41,7 @@ export default function TopNavigation() {
         axios.get(`${process.env.REACT_APP_API_URL}/sessions/logout`, {withCredentials: true}).then(res => {
             res.data.email ? setAuthState(true) : setAuthState(false);
             setAuthState(!!res.data.email);
+            socket.emit('logout', "");
         })
     }
 
