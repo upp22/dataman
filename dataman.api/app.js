@@ -20,7 +20,16 @@ const usersRouter = require('./routes/users');
 const sessionRouter = require('./routes/sessions');
 const bodyParser = require("body-parser");
 
+// schema
+const ClientCollection = require('./models/ClientsSchema');
+
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
+
+// Clear all connected clients in Mongo
+ClientCollection.deleteMany({}).then(x => {
+    console.log(`Clients collection cleared`);
+})
+
 app.use(
     cors({
         origin: "http://localhost:3000", // <-- location of the react app were connecting to
@@ -28,64 +37,93 @@ app.use(
     })
 );
 
-const connectedClients = [];
+// Mongoose Functions TODO: Move to Models
+const getClient = async (socketId) => {
+    const doc = await ClientCollection.findOne({socketId: socketId}).exec();
+    return !!doc;
+};
 
-io.sockets.on('connection', (socket) => {
+const getAllClients = async () => {
+    const doc = await ClientCollection.find({}).exec();
+    return doc;
+}
+
+const addClient = async (socketId) => {
+    const newClient = new ClientCollection({
+        socketId: socketId,
+        user: null,
+        location: {lat: 0, lng: 0}
+    });
+    await newClient.save();
+    console.log('New Client added to mongo.');
+}
+
+const deleteClient = async (socketId) => {
+    await ClientCollection.deleteOne({socketId: socketId}).then(res => {
+        console.log('Client Connection Deleted.')
+    }).then(x => {
+        broadcastLocationUpdate();
+    })
+}
+
+const updateClient = async (socketId, update) => {
+    const filter = {socketId: socketId};
+    await ClientCollection.findOneAndUpdate(filter, update).then(x => {
+        broadcastLocationUpdate();
+    })
+
+}
+
+const broadcastLocationUpdate = async () => {
+    const allClients = await getAllClients();
+    const payload = allClients.map(c => {
+        const { lat, lng } = c.location;
+        return {
+            socketId: c.socketId,
+            user: c.user,
+            location: { lat: lat, lng: lng }
+        }
+    });
+    io.emit('locationUpdate', payload);
+}
+
+io.sockets.on('connection', async (socket) => {
     console.log(`Socket client connected: ${socket.id}`);
 
-    const broadcastLocationUpdate = (clients) => {
-        const socketIds = clients.map(x => x.socketId);
-        socketIds.forEach(s => {
-            io.to(s).emit('locationUpdate', clients);
-        });
+    // If socketId does not exist then add to db
+    const socketExists = await getClient(socket.id)
+    if (!socketExists) {
+        await addClient(socket.id);
     }
 
-    let user = {
-        socketId: socket.id,
-        user: null,
-        location: { lat: 0, lng: 0 }
-    }
-    if (!connectedClients.some(s => s.socketId.includes(socket.id))) {
-        connectedClients.push(user);
-    }
-
-    const socketIds = connectedClients.map(x => x.socketId);
-    socketIds.forEach(s => {
-       io.to(s).emit('initialConnect', connectedClients);
-    });
+    await broadcastLocationUpdate();
 
     // when user logs in we get their user details and add to list of ids:
-    socket.on('clientLogin', (u) => {
-        console.log(u);
-        let index = connectedClients.findIndex(item => item.socketId === u.socketId);
-        if (index > -1) {
-            connectedClients[index].user = u.user;
-        }
-        broadcastLocationUpdate(connectedClients);
+    socket.on('clientLogin', async u => {
+        // TODO:
+        await updateClient(socket.id, {
+            user: u.user
+        });
     });
 
     // Delete socket when disconnects
-    socket.on('disconnect', s => {
-        const index = connectedClients.findIndex(i => i.socketId === socket.id);
-        connectedClients.splice(index, 1);
-        broadcastLocationUpdate(connectedClients);
+    socket.on('disconnect', async s => {
+        await deleteClient(socket.id);
     })
 
     // Remove user from socket on logout
-    socket.on('logout', s => {
-        const index = connectedClients.findIndex(i => i.socketId === socket.id);
-        connectedClients[index].user = null;
-        broadcastLocationUpdate(connectedClients);
+    socket.on('logout', async s => {
+        // TODO:
+        await updateClient(socket.id, {
+            user: null
+        })
     });
 
-    socket.on('locationUpdate', function (data) {
-        // TODO: Get Id and socket ID of clients (match these to user names) then broadcast to all connected clients
-        console.log(`Client Location Update: ${data}`);
-        console.log(connectedClients)
-        const index = connectedClients.findIndex(i => i.socketId === socket.id);
-        connectedClients[index].location.lat = data.lat;
-        connectedClients[index].location.lng = data.lng;
-        broadcastLocationUpdate(connectedClients);
+    socket.on('locationUpdate', async data => {
+        // TODO:
+        await updateClient(socket.id, {
+            location: { lat: data.lat, lng: data.lng }
+        })
     });
 })
 

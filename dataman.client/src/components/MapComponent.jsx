@@ -27,7 +27,6 @@ const MapComponent = (props) => {
 
     // updateLocation if location changes
     useEffect((x) => {
-        console.log(props.users);
         setCurrentLocation(currentLocation);
     }, [currentLocation])
 

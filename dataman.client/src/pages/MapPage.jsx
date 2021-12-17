@@ -11,8 +11,8 @@ export function MapPage() {
     const [collectionState, setCollectionState] = useState([]);
     const [username, setUsername] = useState("anonymous");
 
-    socket.on('positionUpdate', connectedUsers => {
-        console.log(`PositionUpdate Received:`);
+    socket.on('locationUpdate', connectedUsers => {
+        console.log(`locationUpdate Received:`);
         console.log(connectedUsers);
         setCollectionState(connectedUsers);
     });
