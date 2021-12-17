@@ -10,7 +10,7 @@ export function AboutPage() {
     // Validate user session - TODO: determine if necessary
     useEffect(() => {
         const getSession = async () => {
-            const res =  await axios.get(`${process.env.REACT_APP_API_URL}/sessions/user`, {withCredentials: true});
+            const res =  await axios.get(`/sessions/user`, {withCredentials: true});
             setAuthState(!!res.data.email);
         }
         getSession();

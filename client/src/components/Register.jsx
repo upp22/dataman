@@ -31,7 +31,7 @@ export default function Register() {
             password: password
         }
 
-        axios.post(`${process.env.REACT_APP_API_URL}/sessions/register`,payload, {withCredentials: true}).then(res => {
+        axios.post(`/sessions/register`,payload, {withCredentials: true}).then(res => {
             console.log(res);
             if (res.data == 'User Exists') {
                 toast.warning('User Exists');

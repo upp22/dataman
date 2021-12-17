@@ -28,7 +28,7 @@ export default function TopNavigation() {
         console.log(`context changed in nav`)
     }, [GetUserContext().userContext])
 
-    axios.get(`${process.env.REACT_APP_API_URL}/sessions/user`, {withCredentials: true}).then(res => {
+    axios.get(`/sessions/user`, {withCredentials: true}).then(res => {
         const isLoggedIn = !!res.data.email;
         if (isLoggedIn) {
             setAuthState(true);
@@ -38,7 +38,7 @@ export default function TopNavigation() {
     })
 
     const handleLogout = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/sessions/logout`, {withCredentials: true}).then(res => {
+        axios.get(`/sessions/logout`, {withCredentials: true}).then(res => {
             res.data.email ? setAuthState(true) : setAuthState(false);
             setAuthState(!!res.data.email);
             socket.emit('logout', "");

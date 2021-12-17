@@ -9,14 +9,14 @@ export default function LoginStatus() {
     const [user, setUser] = useState({});
 
     const handleClick = (e) => {
-        axios.get(`${process.env.REACT_APP_API_URL}/sessions/user`, {withCredentials: true}).then(res => {
+        axios.get(`/sessions/user`, {withCredentials: true}).then(res => {
             console.log(res);
             setUser({email: res.data.email});
         })
     }
 
     const handleLogout = (e) => {
-        axios.get(`${process.env.REACT_APP_API_URL}/sessions/logout`, {withCredentials: true}).then(res => {
+        axios.get(`/sessions/logout`, {withCredentials: true}).then(res => {
             console.log(res.data);
 
             //setUser({user: null});
