@@ -30,7 +30,7 @@ export default function Login() {
             password: password
         }
 
-        axios.post(`${process.env.REACT_APP_API_URL}/sessions/login`, payload, {withCredentials: true}).then(res => {
+        axios.post(`/sessions/login`, payload, {withCredentials: true}).then(res => {
             if (res.data == 'Successfully Authenticated') {
                 toast.success('Successfully logged in');
                 setUserContext({email: payload.username, loginStatus: true});
