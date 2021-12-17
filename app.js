@@ -180,6 +180,6 @@ app.use('/sessions', sessionRouter);
 // });
 
 // Start the web server
-server.listen(3030, () => {
+server.listen(process.env.PORT || 3030, () => {
     console.log(`listening on port http://localhost:3030`);
 });
