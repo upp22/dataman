@@ -3,7 +3,7 @@ import UserContext from "../context/UserContext";
 import axios from "axios";
 import { useNavigate } from 'react-router';
 
-export function AboutPage() {
+export function AdminPage() {
     let navigate = useNavigate();
     const [authState, setAuthState] = useState(false);
 
@@ -23,7 +23,7 @@ export function AboutPage() {
 
     return (
         <div>
-            <h1>About</h1>
+            <h1>Admin</h1>
             <p>Welcome</p>
             {
                 authState && <p>{authState}</p>

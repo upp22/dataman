@@ -5,7 +5,7 @@ import {HomePage} from "../pages/HomePage";
 import {MapPage} from "../pages/MapPage";
 import {LoginPage} from "../pages/LoginPage";
 import axios from "axios";
-import {AboutPage} from "../pages/AboutPage";
+import {AdminPage} from "../pages/AdminPage";
 import {GetUserContext, SetUserContext} from "../context/UserContext";
 import socket from '../context/SocketModule';
 
@@ -59,7 +59,7 @@ export default function TopNavigation() {
             setRoutes((
                 <Routes>
                     <Route path={'/'} element={<HomePage/>}/>
-                    <Route path={'/About'} element={<AboutPage/>}/>
+                    <Route path={'/Admin'} element={<AdminPage/>}/>
                     <Route path={'/Maps'} element={<MapPage/>}/>
                     <Route path={'/Login'} element={<LoginPage/>}/>
                     <Route path={'*'} element={<p>Not Found</p>}/>
@@ -80,7 +80,7 @@ export default function TopNavigation() {
                                 {
                                     // Render about page only if logged in
                                     authState &&
-                                    <Nav.Link as={Link} to={'/about'}>About</Nav.Link>
+                                    <Nav.Link as={Link} to={'/admin'}>Admin</Nav.Link>
 
                                 }
                                 <Nav.Link as={Link} to={'/maps'}>Maps</Nav.Link>
