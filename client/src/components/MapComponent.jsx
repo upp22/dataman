@@ -15,10 +15,12 @@ const MapComponent = (props) => {
                 socket.emit('locationUpdate', {lat: position.coords.latitude, lng: position.coords.longitude});
             });
 
-            // navigator.geolocation.watchPosition(function(position) {
-            //     setCurrentLocation({ lat: position.coords.latitude, lng: position.coords.longitude});
-            //     socket.emit('locationUpdate', {lat: position.coords.latitude, lng: position.coords.longitude});
-            // });
+            navigator.geolocation.watchPosition(function(position) {
+                setCurrentLocation({lat: position.coords.latitude, lng: position.coords.longitude});
+                console.log("Latitude is :", position.coords.latitude);
+                console.log("Longitude is :", position.coords.longitude);
+                socket.emit('locationUpdate', {lat: position.coords.latitude, lng: position.coords.longitude});
+            });
 
         } else {
             console.log("Not Available");
@@ -52,8 +54,8 @@ const MapComponent = (props) => {
                             return (
                                 <Marker
                                     key={x.socketId}
-                                    title={'Your current position'}
-                                    label={x.user}
+                                    title={x.user}
+                                    // label={x.user}
                                     position={x.location}/>
                             )
                         })
