@@ -30,6 +30,8 @@ ClientCollection.deleteMany({}).then(x => {
     console.log(`Clients collection cleared`);
 })
 
+app.use(express.static("./client/build"));
+
 app.use(
     cors({
         origin: "http://localhost:3000", // <-- location of the react app were connecting to
