@@ -3,8 +3,9 @@ import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api';
 import socket from '../context/SocketModule';
 
 const MapComponent = (props) => {
-    const defaultCenter = {lat: -27.4705, lng: 153.0260}
-    const [currentLocation, setCurrentLocation] = useState(defaultCenter);
+    const defaultCenter = {lat: -29.777292, lng: 149.203997}
+    const defaultPosition = { lat: -27.470504, lng: 153.025955}
+    const [currentLocation, setCurrentLocation] = useState(defaultPosition);
 
     useEffect((x) => {
         if ("geolocation" in navigator) {
@@ -33,7 +34,7 @@ const MapComponent = (props) => {
     }, [currentLocation])
 
     const mapStyles = {
-        height: "50vh",
+        height: "70vh",
         width: "100%"
     };
 
@@ -43,8 +44,8 @@ const MapComponent = (props) => {
                 googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
                 <GoogleMap
                     mapContainerStyle={mapStyles}
-                    zoom={13}
-                    center={currentLocation}>
+                    zoom={5}
+                    center={defaultPosition}>
                     <Marker
                         title={'Your current position'}
                         label={'Me'}

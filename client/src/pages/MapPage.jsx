@@ -28,8 +28,6 @@ export function MapPage() {
 
     return (
         <div>
-            <h1>Map Locations</h1>
-            <p>Your current location</p>
             <div className={'map-main-content-wrapper'}>
                 <MapComponent users={collectionState}/>
                 <MapUsers  collection={collectionState}/>

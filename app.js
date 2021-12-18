@@ -73,7 +73,6 @@ const updateClient = async (socketId, update) => {
     await ClientCollection.findOneAndUpdate(filter, update).then(x => {
         broadcastLocationUpdate();
     })
-
 }
 
 const broadcastLocationUpdate = async () => {

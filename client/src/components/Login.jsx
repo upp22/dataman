@@ -35,7 +35,7 @@ export default function Login() {
                 toast.success('Successfully logged in');
                 setUserContext({email: payload.username, loginStatus: true});
                 socket.emit('clientLogin', {user: payload.username, socketId: socket.id} );
-                navigate('/');
+                navigate('/maps');
             } else {
                 toast.warning('Unable to login');
             }
