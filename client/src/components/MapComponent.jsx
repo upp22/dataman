@@ -16,12 +16,12 @@ const MapComponent = (props) => {
                 socket.emit('locationUpdate', {lat: position.coords.latitude, lng: position.coords.longitude});
             });
 
-            navigator.geolocation.watchPosition(function(position) {
-                setCurrentLocation({lat: position.coords.latitude, lng: position.coords.longitude});
-                console.log("Latitude is :", position.coords.latitude);
-                console.log("Longitude is :", position.coords.longitude);
-                socket.emit('locationUpdate', {lat: position.coords.latitude, lng: position.coords.longitude});
-            });
+            // navigator.geolocation.watchPosition(function(position) {
+            //     setCurrentLocation({lat: position.coords.latitude, lng: position.coords.longitude});
+            //     console.log("Latitude is :", position.coords.latitude);
+            //     console.log("Longitude is :", position.coords.longitude);
+            //     socket.emit('locationUpdate', {lat: position.coords.latitude, lng: position.coords.longitude});
+            // });
 
         } else {
             console.log("Not Available");
