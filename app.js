@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require("passport");
 const passportLocal = require("passport-local").Strategy;
+const path = require('path');
 
 // SocketIo
 const {createServer} = require("http");
@@ -28,6 +29,12 @@ const ClientCollection = require('./models/ClientsSchema');
 // Clear all connected clients in Mongo
 ClientCollection.deleteMany({}).then(x => {
     console.log(`Clients collection cleared`);
+})
+
+const handler = (req, res) => res.sendFile(path.join(__dirname, "./client/build/index.html"));
+const r = ['/', '/maps', '/login', '/admin'];
+r.forEach(route => {
+    app.get(route, handler);
 })
 
 app.use(express.static("./client/build"));
