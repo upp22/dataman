@@ -31,6 +31,7 @@ ClientCollection.deleteMany({}).then(x => {
     console.log(`Clients collection cleared`);
 })
 
+// Allow refreshing the React page on the following routes
 const handler = (req, res) => res.sendFile(path.join(__dirname, "./client/build/index.html"));
 const r = ['/', '/maps', '/login', '/admin'];
 r.forEach(route => {
